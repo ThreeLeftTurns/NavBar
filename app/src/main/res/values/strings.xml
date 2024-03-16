@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Project2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">About Me</string>
+    <string name="menu_gallery">Movie List</string>
+    <string name="menu_slideshow">Random Movie</string>
+    <string name="Aboutme">Hello! I\'m Michael Cali, a Computer Science graduate student at Syracuse University with a passion for technology, aiming to delve deep into machine learning and autonomous systems. My academic pursuits are matched by my love for the outdoors, believing that nature fuels creativity and sharpens problem-solving skills. I\'m on a quest to contribute to technological advancements that benefit humanity and our planet, while embracing every opportunity to learn, grow, and explore new challenges.</string>
+    <string name="textview">TextView</string>
+    <string name="rating">Rating:</string>
+    <string name="release_date">Release Date:</string>
+</resources>
