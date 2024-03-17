@@ -1,54 +1,90 @@
 package com.example.project2.ui.movie_list;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import com.example.project2.R;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class GalleryFragment extends Fragment {
-
-    private MoviesAdaptor adapter; // Make sure to use the correct adapter class name
-
+public class GalleryFragment extends Fragment
+{
+    //Widgets in the layout
+    private RecyclerView recyclerView;
+    private List<Movies> moviesList;
+    //Called when the fragment is first created.
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        //Tells the system this fragment has its own menu.
+        setHasOptionsMenu(true);
+    }
+    //Called to create the view hierarchy.
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        //Inflate the layout for this fragment.
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-
-        // Initialize the RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.moviesRecyclerView);
+        //Get the RecyclerView from the layout.
+        recyclerView = view.findViewById(R.id.moviesRecyclerView);
+        //Set the layout manager to position the items.
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        // Create the movies list
-        List<Movies> moviesList = createMovieList();
+        //Create and set the adapter for the RecyclerView.
+        moviesList = createMovieList();
+        MoviesAdaptor adapter = new MoviesAdaptor(getContext(), moviesList, movie ->
+        {
 
-        adapter = new MoviesAdaptor(getContext(), moviesList, movie -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
             Bundle bundle = new Bundle();
             bundle.putSerializable("movie", movie);
-            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
-            navController.navigate(R.id.action_nav_gallery_to_nav_movie_details, bundle); // Use the action ID defined in the navigation graph
+            navController.navigate(R.id.action_nav_gallery_to_nav_movie_details, bundle);
         });
-
-
-
-
-        // Set the adapter to the RecyclerView
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
+    //Handles clicks on menu items.
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        //Check if the random movie menu item was clicked.
+        if (item.getItemId() == R.id.randomMovieButton)
+        {
+            //Generate a random number and scroll to that position.
+            int randomIndex = new Random().nextInt(moviesList.size());
+            recyclerView.smoothScrollToPosition(randomIndex);
 
-    private List<Movies> createMovieList() {
+            //Navigate to the details of the randomly selected movie.
+            recyclerView.post(() ->
+            {
+                Movies movie = moviesList.get(randomIndex);
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("movie", movie);
+                navController.navigate(R.id.action_nav_gallery_to_nav_movie_details, bundle);
+            });
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //Creates a list of Movies.
+    private List<Movies> createMovieList()
+{
 
         List<Movies> moviesList = new ArrayList<>();
         moviesList.add(new Movies("The Shawshank Redemption", "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.", "1994-09-23", 9.3, "https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg"));
@@ -69,7 +105,7 @@ public class GalleryFragment extends Fragment {
         moviesList.add(new Movies("Avatar", "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.", "2009-12-18", 7.8, "https://m.media-amazon.com/images/M/MV5BZDA0OGQxNTItMDZkMC00N2UyLTg3MzMtYTJmNjg3Nzk5MzRiXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_FMjpg_UX1000_.jpg"));
         moviesList.add(new Movies("Titanic", "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic.", "1997-12-19", 7.8, "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_FMjpg_UX1000_.jpg"));
         moviesList.add(new Movies("Star Wars: Episode V - The Empire Strikes Back", "After the rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda, while his friends are pursued by Darth Vader and a bounty hunter named Boba Fett all over the galaxy.", "1980-05-21", 8.7, "https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg"));
-        moviesList.add(new Movies("The Lion King", "A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.", "1994-06-24", 8.5, "https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg"));
+        moviesList.add(new Movies("The Lion King", "A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.", "1994-06-24", 8.5, "https://m.media-amazon.com/images/M/MV5BYTYxNGMyZTYtMjE3MS00MzNjLWFjNmYtMDk3N2FmM2JiM2M1XkEyXkFqcGdeQXVyNjY5NDU4NzI@._V1_.jpg"));
         moviesList.add(new Movies("Back to the Future", "Marty McFly, a 17-year-old high school student, is accidentally sent thirty years into the past in a time-traveling DeLorean invented by his close friend, the eccentric scientist Doc Brown.", "1985-07-03", 8.5, "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg"));
         moviesList.add(new Movies("The Silence of the Lambs", "A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims.", "1991-02-14", 8.6, "https://m.media-amazon.com/images/M/MV5BNjNhZTk0ZmEtNjJhMi00YzFlLWE1MmEtYzM1M2ZmMGMwMTU4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg"));
 

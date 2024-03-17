@@ -2,12 +2,16 @@ package com.example.project2.ui.movie_list;
 
 import java.io.Serializable;
 
-public class Movies implements Serializable {
-    private String title;
-    private String description;
-    private String releaseDate;
-    private double rating;
-    private String imageUrl;
+public class Movies implements Serializable
+{
+    //Properties of the movie list
+    private final String title;
+    private final String description;
+    private final String releaseDate;
+    private final double rating;
+    private final String imageUrl;
+
+    //Represents a movie with title, description, etc.
 
     public Movies(String title, String description, String releaseDate, double rating, String imageUrl) {
         this.title = title;
@@ -17,7 +21,7 @@ public class Movies implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    // Getters
+    //Getters
     public String getTitle() {
         return title;
     }
@@ -36,26 +40,5 @@ public class Movies implements Serializable {
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    // Setters (if you need to modify the properties after instantiation)
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }
